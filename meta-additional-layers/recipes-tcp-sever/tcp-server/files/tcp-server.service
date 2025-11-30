@@ -1,0 +1,11 @@
+[Unit]
+Description=Startup for 1-Wire tcp-server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/tcp-server
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

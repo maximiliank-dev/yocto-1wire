@@ -1,0 +1,23 @@
+/* dtc -@ -I dts -O dtb -o out.dtbo raspberry-overlay.dts */
+
+/dts-v1/;
+/plugin/;
+
+
+#include <dt-bindings/gpio/gpio.h>
+
+&{/} {
+
+	my-onewire {
+		compatible = "my-onewire";
+		status = "okay";
+		label = "Test";
+		my_value = <12>;
+		/*onewire-gpios = <&gpio 18 4 >; */ 
+		onewire-gpios = <&gpio 18 16 >; 
+		onewirein-gpios = <&gpio 14 0 >;
+	};
+
+
+};
+

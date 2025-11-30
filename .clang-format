@@ -1,0 +1,6 @@
+BasedOnStyle: GNU
+IndentWidth: 4
+BreakBeforeBraces: Allman
+IndentCaseLabels: false
+ColumnLimit: 100
+SortIncludes: true
