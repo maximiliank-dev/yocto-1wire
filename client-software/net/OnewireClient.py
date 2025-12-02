@@ -18,7 +18,6 @@ class OnewireClient:
         """Reads the Onewire ID."""
 
         self.c.send("FLUSH")
-        data = self.c.receive()
 
         if self.log is not None:
             self.log("[OneWire]: sending RA")
@@ -33,7 +32,10 @@ class OnewireClient:
         else:
             self.c.send("DCRC")
 
-        self.c.receive()
+        data = self.c.receive()
+        if self.log is not None:
+            self.log(f"[OneWire]: received CRC {data}")
+
 
     def read_temperature(self) -> float:
         """Read the temperature and sets"""
@@ -41,9 +43,6 @@ class OnewireClient:
             self.log("[OneWire]: sending CT")
 
         self.c.send("FLUSH")
-        data = self.c.receive()
-        if self.log is not None:
-            self.log(f"[OneWire]: received flush {data}")
 
         self.c.send("CT")
 

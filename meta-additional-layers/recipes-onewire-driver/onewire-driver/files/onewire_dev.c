@@ -77,7 +77,10 @@ static const uint8_t onewire_crc8_table[256] = {
     0x74, 0x2A, 0xC8, 0x96, 0x15, 0x4B, 0xA9, 0xF7, 0xB6, 0xE8, 0x0A, 0x54, 0xD7, 0x89, 0x6B, 0x35
 };
 
-/*static write_response_char(char c) {
+/**
+ * Adds a response to the FIFO
+ */
+static write_response_char(char c) {
     struct read_data_t *result = kmalloc (sizeof (struct read_data_t), GFP_KERNEL);
     for (int i = 0; i < 8; i++)
     {
@@ -87,7 +90,7 @@ static const uint8_t onewire_crc8_table[256] = {
     result->size = 8;
 
     kfifo_put (&result_fifo, result); 
-}*/
+}
 
 /**
  * Compares 2 strings
@@ -374,30 +377,36 @@ onewire_write (struct file *filp, const char __user *buf, size_t count, loff_t *
         if (s_dev->kernel_buffer[0] == 'r')
         {
             reset (onewire_pin);
+            write_response_char('r');
         }
         else if (s_dev->kernel_buffer[0] == 'h')
         {
             gpiod_direction_output (onewire_pin, 1);
             gpiod_set_value (onewire_pin, 1);
+            write_response_char('h');
         }
         else if (s_dev->kernel_buffer[0] == 'l')
         {
             gpiod_direction_output (onewire_pin, 0);
             gpiod_set_value (onewire_pin, 0);
+            write_response_char('l');
         }
         else if (s_dev->kernel_buffer[0] == 'i')
         {
             gpiod_direction_input (onewire_pin);
+            write_response_char('i');
         }
         else if (string_cmp (s_dev->kernel_buffer, "ECRC", 4))
         {
             printk ("Enable CRC check \n");
             resend_false_crc = true;
+            write_response_char('1');
         }
         else if (string_cmp (s_dev->kernel_buffer, "DCRC", 4))
         {
             printk ("Disable CRC check \n");
             resend_false_crc = false;
+            write_response_char('1');
         }
         else if (string_cmp (s_dev->kernel_buffer, "FLUSH", 5)) // Flush the FIFO
         {
