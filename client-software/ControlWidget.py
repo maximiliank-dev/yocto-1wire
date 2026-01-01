@@ -40,7 +40,7 @@ class ControlWidget(QWidget):
         self.label1.setFont(current_font)
 
         self.line = QLineEdit()
-        self.line.setText("192.168.178.24")
+        self.line.setText("-")
         self.layout.addWidget(self.button0, 0, 0)
         self.layout.addWidget(self.label1, 0, 1)
         self.layout.addWidget(self.line, 0, 2)
